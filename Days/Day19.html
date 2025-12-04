@@ -2,13 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luukku 15</title>
-    <link rel="stylesheet" href="../style.css">
+    <title>Spinning ASCII Donut</title>
+    <style>
+        body {
+            background-image: url('../Assets/fire.gif');
+            background-size: cover;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        pre {
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 1;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-   <img src="../Assets/defqon.jpeg" alt="defqon" class="kuva">
-    <br>
-    <a href="../index.html">Back to Main Page</a>
+    <h2>Spinning ASCII Donut</h2>
+    <pre id="donut"></pre>
+    <script>
+    // Donut animation by Andy Sloane, adapted for HTML
+    const pre = document.getElementById('donut');
+    let A = 0, B = 0;
+    const render = () => {
+        let b = [];
+        let z = [];
+        let width = 80, height = 40;
+        let output = '';
+        for (let k = 0; k < width * height; k++) {
+            b[k] = ' ';
+            z[k] = 0;
+        }
+        for (let j = 0; j < 6.28; j += 0.07) {
+            for (let i = 0; i < 6.28; i += 0.02) {
+                let c = Math.sin(i);
+                let d = Math.cos(j);
+                let e = Math.sin(A);
+                let f = Math.sin(j);
+                let g = Math.cos(A);
+                let h = d + 2;
+                let D = 1 / (c * h * e + f * g + 5);
+                let l = Math.cos(i);
+                let m = Math.cos(B);
+                let n = Math.sin(B);
+                let t = c * h * g - f * e;
+                // Adjust scaling for full donut
+                let x = Math.floor(width / 2 + width / 2.2 * (l * h * m - t * n));
+                let y = Math.floor(height / 2 + height / 2.2 * (l * h * n + t * m));
+                let o = x + width * y;
+                let N = Math.floor(8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n));
+                if (height > y && y > 0 && width > x && x > 0 && D > z[o]) {
+                    z[o] = D;
+                    b[o] = ".,-~:;=!*#$@"[N > 0 ? N : 0];
+                }
+            }
+        }
+        for (let k = 0; k < b.length; k++) {
+            output += b[k];
+            if (k % width === width - 1) output += "\n";
+        }
+        pre.textContent = output;
+        A += 0.04;
+        B += 0.02;
+    };
+    setInterval(render, 50);
+    </script>
 </body>
 </html>
