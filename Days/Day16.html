@@ -1,61 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luukku 16</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8">
+  <title>Jumpscare</title>
+  <h1>Onpa ihanaa olla opiskelija...</h1>
 
-        body {
-            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
-            color: #ffeb3b;
-            font-family: 'Arial', sans-serif;
-            padding: 40px 20px;
-            text-align: center;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+  <link rel="stylesheet" href="../style.css">
+  <style>
 
-        .content {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #ffd700;
-            max-width: 600px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
+    #jumpscareImage {
+      display: none; 
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .emoji {
-            font-size: 4em;
-            margin: 20px 0;
-        }
-
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #ffeb3b;
-        }
-    </style>
+    }
+  </style>
 </head>
 <body>
-    <div class="content">
-        <h1> Day 16 </h1>
-        <div class="emoji">??</div>
-        <p>Sledding brings joy to young and old!</p>
-    </div>
+
+  <img id="jumpscareImage" src="../Assets/jobapplication.webp" alt="Jumpscare">
+  <audio id="jumpscareAudio" src="../Assets/flashbang-gah-dayum.mp3"></audio>
+  <script>
+    setTimeout(() => {
+      const img = document.getElementById('jumpscareImage');
+       const audio = document.getElementById('jumpscareAudio');
+      img.style.display = 'block';
+       audio.play();
+    }, 2500);
+
+
+  </script>
+
 </body>
 </html>
