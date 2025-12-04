@@ -53,6 +53,8 @@
   // Scene
   const scene = new THREE.Scene();
 
+  
+
   // Camera
   const camera = new THREE.PerspectiveCamera(
     60,
@@ -99,6 +101,17 @@
     renderer.render(scene, camera);
   }
   animate();
+
+
+
+  function handleClickOnce() {
+  // audio stuff
+  const audio = document.getElementById('bgm');
+  audio.play();
+  document.removeEventListener('click', handleClickOnce);
+}
+
+document.addEventListener('click', handleClickOnce);
 </script>
 
 </body>
