@@ -1,0 +1,93 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarGrid = document.getElementById('calendar-grid');
+    const modal = document.getElementById('modal');
+    const dayIframe = document.getElementById('day-iframe');
+    const closeBtn = document.querySelector('.close');
+
+    // Developer mode toggle
+    let devMode = false;
+    document.addEventListener('keydown', function(event) {
+        if (event.key.toLowerCase() === 'd') {
+            devMode = !devMode;
+            console.log('Developer mode: ' + (devMode ? 'ENABLED' : 'DISABLED'));
+            updateDayBoxes();
+        }
+    });
+
+    // Get today's date
+    const today = new Date();
+    const currentDay = today.getDate();
+    const currentMonth = today.getMonth() + 1; // December is 12
+    const isDecember = currentMonth === 12;
+
+    function updateDayBoxes() {
+        // Clear existing day boxes
+        calendarGrid.innerHTML = '';
+
+        // Create day boxes
+        for (let day = 1; day <= 24; day++) {
+            const dayBox = document.createElement('div');
+            dayBox.className = 'day-box';
+            dayBox.innerHTML = `
+                <div class="day-number">${day}</div>
+                <div class="day-label">Dec ${day}</div>
+            `;
+
+            // Check if day is today (only if we're in December)
+            if (isDecember && day === currentDay) {
+                dayBox.classList.add('today');
+            }
+
+            let shouldLock = false;
+
+            // Developer mode: unlock all days
+            if (devMode) {
+                shouldLock = false;
+            }
+            // Normal mode: lock based on date
+            else {
+                // Only allow opening days if it's December
+                if (!isDecember) {
+                    shouldLock = true;
+                } else if (day > currentDay) {
+                    // In December, lock future days
+                    shouldLock = true;
+                }
+            }
+
+            if (shouldLock) {
+                dayBox.classList.add('locked');
+                dayBox.style.pointerEvents = 'none';
+            } else {
+                dayBox.addEventListener('click', function() {
+                    openDay(day);
+                });
+            }
+
+            calendarGrid.appendChild(dayBox);
+        }
+    }
+
+    // Initialize day boxes
+    updateDayBoxes();
+
+    // Open day content in modal
+    function openDay(day) {
+        dayIframe.src = `Days/Day${day}.html`;
+        modal.style.display = 'block';
+    }
+
+    // Close modal when close button is clicked
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        dayIframe.src = '';
+    });
+
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            dayIframe.src = '';
+        }
+    });
+});
