@@ -80,7 +80,7 @@ function openDay(day) {
     
     // Open in new tab after animation starts
     setTimeout(function() {
-        window.open(`Days/Day${day}.html`, '_blank');
+        window.open(`Days/Day${day}.html`, '_self');
     }, 300);
     
     // Remove animation class after it completes
