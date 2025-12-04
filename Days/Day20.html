@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KalleHub - Infinite Fun!</title>
+<title>KalleHub</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -31,7 +31,7 @@
 </div>
 
 <footer>
-    © 2025 KalleHub - Just a funny prank site!
+    © 2025 KalleHub - Just a little aha funny!
 </footer>
 
 <script>
@@ -59,7 +59,7 @@ const titles = [
     "Silly Hat Parade"
 ];
 
-// Function to generate a single random card
+
 function createCard() {
     const grid = document.getElementById('videoGrid');
     const card = document.createElement('div');
@@ -86,12 +86,12 @@ function createCard() {
     grid.appendChild(card);
 }
 
-// Generate initial set of videos
+
 for(let i=0; i<20; i++) {
     createCard();
 }
 
-// Optional: infinite scroll to keep generating more as user scrolls
+
 window.addEventListener('scroll', () => {
     if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
         for(let i=0; i<10; i++) {
