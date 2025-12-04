@@ -1,61 +1,493 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luukku 23</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<title>Day 23 - Punch Out Game</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
-            color: #ffeb3b;
-            font-family: 'Arial', sans-serif;
-            padding: 40px 20px;
-            text-align: center;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #1a1a2e;
+        font-family: Arial, sans-serif;
+    }
 
-        .content {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #ffd700;
-            max-width: 600px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
+    .game-container {
+        text-align: center;
+        background: #0f3460;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
+    h1 {
+        color: #e94560;
+        margin-bottom: 20px;
+        font-size: 28px;
+    }
 
-        .emoji {
-            font-size: 4em;
-            margin: 20px 0;
-        }
+    .game-canvas {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        gap: 40px;
+        background: linear-gradient(to bottom, #87ceeb, #90ee90);
+        width: 600px;
+        height: 400px;
+        border: 4px solid #333;
+        position: relative;
+        margin: 0 auto 20px;
+        padding: 20px;
+    }
 
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #ffeb3b;
-        }
-    </style>
+    .stage-bg {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 128px;
+        height: 128px;
+        image-rendering: pixelated;
+        background-image: url('../Assets/PunchIlpi/stage.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 1;
+    }
+
+    .character {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .player {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .opponent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .character-sprite {
+        width: 64px;
+        height: 64px;
+        image-rendering: pixelated;
+        margin-bottom: 10px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .health-bar-container {
+        width: 100px;
+        height: 20px;
+        background: #333;
+        border: 2px solid #fff;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .health-bar {
+        height: 100%;
+        background: #00ff00;
+        transition: width 0.3s ease;
+    }
+
+    .health-text {
+        color: #fff;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .controls {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background: #e94560;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover:not(:disabled) {
+        background: #ff6b6b;
+    }
+
+    button:disabled {
+        background: #666;
+        cursor: not-allowed;
+    }
+
+    .status-message {
+        color: #00ff00;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 15px;
+        min-height: 25px;
+    }
+
+    .game-over {
+        color: #ffff00;
+        font-size: 24px;
+    }
+</style>
 </head>
 <body>
-    <div class="content">
-        <h1> Day 23 </h1>
-        <div class="emoji"></div>
-        <p>The fire warms our Christmas gathering!</p>
+
+<div class="game-container">
+    <h1>🥊 Punch Out Game 🥊</h1>
+
+    <div class="game-canvas">
+        <div class="stage-bg"></div>
+
+        <div class="character player">
+            <div class="health-bar-container">
+                <div class="health-bar" id="playerHealthBar" style="width: 100%"></div>
+            </div>
+            <div class="character-sprite" id="playerSprite"></div>
+            <div class="health-text">You: <span id="playerHP">100</span>/100</div>
+        </div>
+
+        <div class="character opponent">
+            <div class="health-bar-container">
+                <div class="health-bar" id="opponentHealthBar" style="width: 100%"></div>
+            </div>
+            <div class="character-sprite" id="opponentSprite"></div>
+            <div class="health-text">Ilpi: <span id="opponentHP">100</span>/100</div>
+        </div>
     </div>
+
+    <div class="controls">
+        <button id="leftPunchBtn">👊 Left Punch</button>
+        <button id="rightPunchBtn">👊 Right Punch</button>
+        <button id="dodgeBtn">🏃 Dodge</button>
+        <button id="resetBtn">🔄 Reset</button>
+    </div>
+
+    <div class="status-message" id="statusMessage"></div>
+</div>
+
+<script>
+    // Game constants
+    const PLAYER_MAX_HP = 100;
+    const OPPONENT_MAX_HP = 100;
+    const PUNCH_DAMAGE = 15;
+    const ATTACK_COOLDOWN = 1500;
+
+    // Game state
+    let gameState = {
+        playerHP: PLAYER_MAX_HP,
+        opponentHP: OPPONENT_MAX_HP,
+        playerState: 'idle', // idle, punching_left, punching_right, dodging, hit
+        opponentState: 'idle', // idle, attacking, blocking, defeated
+        isPlayerAnimating: false,
+        isOpponentAnimating: false,
+        gameOver: false,
+        lastOpponentAttackTime: 0,
+        canPlayerAttack: true
+    };
+
+    // Asset paths
+    const assets = {
+        player: {
+            idle: '../Assets/PunchIlpi/defender_idle.gif',
+            left: '../Assets/PunchIlpi/defender_left.png',
+            right: '../Assets/PunchIlpi/defender_right.png',
+            dodge: '../Assets/PunchIlpi/defender_dodge.png'
+        },
+        opponent: {
+            idle: '../Assets/PunchIlpi/ilpi_idle.gif',
+            attack: '../Assets/PunchIlpi/ilpi_hit.png',
+            block: '../Assets/PunchIlpi/ilpi_hit.png',
+            defeat: '../Assets/PunchIlpi/ilpi_defeat.gif'
+        }
+    };
+
+    // DOM elements
+    const playerSprite = document.getElementById('playerSprite');
+    const opponentSprite = document.getElementById('opponentSprite');
+    const playerHP = document.getElementById('playerHP');
+    const opponentHP = document.getElementById('opponentHP');
+    const playerHealthBar = document.getElementById('playerHealthBar');
+    const opponentHealthBar = document.getElementById('opponentHealthBar');
+    const statusMessage = document.getElementById('statusMessage');
+
+    const leftPunchBtn = document.getElementById('leftPunchBtn');
+    const rightPunchBtn = document.getElementById('rightPunchBtn');
+    const dodgeBtn = document.getElementById('dodgeBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Update sprites on state change
+    function updatePlayerSprite() {
+        let imagePath;
+        switch(gameState.playerState) {
+            case 'punching_left':
+                imagePath = assets.player.left;
+                break;
+            case 'punching_right':
+                imagePath = assets.player.right;
+                break;
+            case 'dodging':
+                imagePath = assets.player.dodge;
+                break;
+            default:
+                imagePath = assets.player.idle;
+        }
+        playerSprite.style.backgroundImage = `url('${imagePath}')`;
+    }
+
+    function updateOpponentSprite() {
+        let imagePath;
+        switch(gameState.opponentState) {
+            case 'attacking':
+                imagePath = assets.opponent.attack;
+                break;
+            case 'blocking':
+                imagePath = assets.opponent.block;
+                break;
+            case 'defeated':
+                imagePath = assets.opponent.defeat;
+                break;
+            default:
+                imagePath = assets.opponent.idle;
+        }
+        opponentSprite.style.backgroundImage = `url('${imagePath}')`;
+    }
+
+    function updateHealthBars() {
+        const playerPercent = (gameState.playerHP / PLAYER_MAX_HP) * 100;
+        const opponentPercent = (gameState.opponentHP / OPPONENT_MAX_HP) * 100;
+
+        playerHealthBar.style.width = playerPercent + '%';
+        opponentHealthBar.style.width = opponentPercent + '%';
+
+        playerHP.textContent = Math.max(0, gameState.playerHP);
+        opponentHP.textContent = Math.max(0, gameState.opponentHP);
+
+        // Change color based on health
+        playerHealthBar.style.background = playerPercent > 50 ? '#00ff00' : playerPercent > 25 ? '#ffff00' : '#ff0000';
+        opponentHealthBar.style.background = opponentPercent > 50 ? '#00ff00' : opponentPercent > 25 ? '#ffff00' : '#ff0000';
+    }
+
+    function setStatusMessage(msg, isGameOver = false) {
+        statusMessage.textContent = msg;
+        if (isGameOver) {
+            statusMessage.classList.add('game-over');
+        } else {
+            statusMessage.classList.remove('game-over');
+        }
+    }
+
+    function disableControls() {
+        leftPunchBtn.disabled = true;
+        rightPunchBtn.disabled = true;
+        dodgeBtn.disabled = true;
+    }
+
+    function enableControls() {
+        if (!gameState.gameOver) {
+            leftPunchBtn.disabled = false;
+            rightPunchBtn.disabled = false;
+            dodgeBtn.disabled = false;
+        }
+    }
+
+    function checkGameOver() {
+        if (gameState.opponentHP <= 0) {
+            gameState.gameOver = true;
+            gameState.opponentState = 'defeated';
+            updateOpponentSprite();
+            setStatusMessage('🎉 YOU WIN! You defeated Ilpi!', true);
+            disableControls();
+            return true;
+        }
+        if (gameState.playerHP <= 0) {
+            gameState.gameOver = true;
+            setStatusMessage('💥 GAME OVER! You were defeated!', true);
+            disableControls();
+            return true;
+        }
+        return false;
+    }
+
+    function playerPunch(direction) {
+        if (gameState.isPlayerAnimating || gameState.gameOver || !gameState.canPlayerAttack) return;
+
+        disableControls();
+        gameState.isPlayerAnimating = true;
+        gameState.canPlayerAttack = false;
+
+        // Set player state
+        gameState.playerState = direction === 'left' ? 'punching_left' : 'punching_right';
+        updatePlayerSprite();
+
+        // Determine damage
+        let damage = PUNCH_DAMAGE;
+        let hit = false;
+
+        // Check if opponent is blocking
+        if (gameState.opponentState === 'blocking') {
+            damage = 5;
+            setStatusMessage('Blocked! Weak hit.');
+            hit = true;
+        } else if (gameState.opponentState === 'attacking') {
+            // Both hit each other
+            damage = PUNCH_DAMAGE;
+            gameState.playerHP -= 10;
+            setStatusMessage('You both hit each other!');
+            hit = true;
+        } else {
+            damage = PUNCH_DAMAGE;
+            setStatusMessage('Direct hit!');
+            hit = true;
+        }
+
+        if (hit) {
+            gameState.opponentHP -= damage;
+        }
+
+        updateHealthBars();
+
+        // Reset player state after animation
+        setTimeout(() => {
+            gameState.playerState = 'idle';
+            updatePlayerSprite();
+            gameState.isPlayerAnimating = false;
+            enableControls();
+
+            if (!checkGameOver()) {
+                // Opponent acts after a delay
+                setTimeout(() => {
+                    opponentTurn();
+                }, 500);
+            }
+        }, ATTACK_COOLDOWN);
+    }
+
+    function playerDodge() {
+        if (gameState.isPlayerAnimating || gameState.gameOver) return;
+
+        disableControls();
+        gameState.isPlayerAnimating = true;
+
+        gameState.playerState = 'dodging';
+        updatePlayerSprite();
+        setStatusMessage('Dodging!');
+
+        setTimeout(() => {
+            gameState.playerState = 'idle';
+            updatePlayerSprite();
+            gameState.isPlayerAnimating = false;
+            enableControls();
+
+            // Opponent acts after a delay
+            setTimeout(() => {
+                opponentTurn();
+            }, 500);
+        }, 800);
+    }
+
+    function opponentTurn() {
+        if (gameState.gameOver || gameState.isOpponentAnimating) return;
+
+        gameState.isOpponentAnimating = true;
+
+        const rand = Math.random();
+        let opponentAction;
+
+        // Opponent AI - weighted random actions
+        if (gameState.opponentHP < 30) {
+            // Block more when low on health
+            opponentAction = rand < 0.6 ? 'block' : 'attack';
+        } else if (gameState.opponentHP < 60) {
+            opponentAction = rand < 0.4 ? 'block' : 'attack';
+        } else {
+            opponentAction = rand < 0.3 ? 'block' : 'attack';
+        }
+
+        if (opponentAction === 'attack') {
+            gameState.opponentState = 'attacking';
+            updateOpponentSprite();
+
+            // Check if player is dodging
+            if (gameState.playerState === 'dodging') {
+                setStatusMessage('Dodged the attack!');
+            } else {
+                const damage = 12;
+                gameState.playerHP -= damage;
+                setStatusMessage('Ilpi attacks! You take damage!');
+            }
+        } else {
+            gameState.opponentState = 'blocking';
+            updateOpponentSprite();
+            setStatusMessage('Ilpi is blocking!');
+        }
+
+        updateHealthBars();
+
+        setTimeout(() => {
+            gameState.opponentState = 'idle';
+            updateOpponentSprite();
+            gameState.isOpponentAnimating = false;
+
+            if (!checkGameOver()) {
+                enableControls();
+            }
+        }, 1000);
+    }
+
+    function resetGame() {
+        gameState = {
+            playerHP: PLAYER_MAX_HP,
+            opponentHP: OPPONENT_MAX_HP,
+            playerState: 'idle',
+            opponentState: 'idle',
+            isPlayerAnimating: false,
+            isOpponentAnimating: false,
+            gameOver: false,
+            lastOpponentAttackTime: 0,
+            canPlayerAttack: true
+        };
+
+        updatePlayerSprite();
+        updateOpponentSprite();
+        updateHealthBars();
+        setStatusMessage('');
+        enableControls();
+    }
+
+    // Event listeners
+    leftPunchBtn.addEventListener('click', () => playerPunch('left'));
+    rightPunchBtn.addEventListener('click', () => playerPunch('right'));
+    dodgeBtn.addEventListener('click', playerDodge);
+    resetBtn.addEventListener('click', resetGame);
+
+    // Initialize game
+    updatePlayerSprite();
+    updateOpponentSprite();
+    updateHealthBars();
+    setStatusMessage('Ready to fight? Click punch or dodge!');
+</script>
+
 </body>
 </html>
