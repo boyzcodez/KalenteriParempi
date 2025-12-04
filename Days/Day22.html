@@ -1,61 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luukku 22</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
-            color: #ffeb3b;
-            font-family: 'Arial', sans-serif;
-            padding: 40px 20px;
-            text-align: center;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .content {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #ffd700;
-            max-width: 600px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .emoji {
-            font-size: 4em;
-            margin: 20px 0;
-        }
-
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #ffeb3b;
-        }
-    </style>
+    <title>Kalenteri</title>
+    <link rel="stylesheet" href="../style.css">
+    
 </head>
 <body>
-    <div class="content">
-        <h1> Day 22 </h1>
-        <div class="emoji"></div>
-        <p>Party time! Let's celebrate together!</p>
-    </div>
+<h2>Bad Compliment Machine</h2>
+<button onclick="compliment()">Give me a compliment</button>
+<h5 id="out"></h5>
+
+
+<script>
+const compliments = [
+  "Sniff, tuoksut ihanalle",
+  "Sun vibat on great",
+  "Miten elämästä on tullu tämmönen",
+  "Luovutan",
+  "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaAAAAAAAAAAAAAAAaaaAAAAAAAAAAAAAAAAAAA",
+  "Kipua",
+  "Olet yhtä kaunis kun tuhat aurinkoa räjähtämässä ja lopettamassa koko universumin toiminnan lopullisesti",
+  "Miten",
+  "Niin joo, mut oikeesti miten",
+  "En oikein tykkää veetistä. Kamala jätkä",
+  "Ilpi is barely legal",
+  "Leo on kyllä leijona",
+  "Ihana päivä ulkona, joten älä vietä sitä sisällä",
+  "Onko kukaan kattonut Konstan pulssia",
+  "Teksti numero 31",
+  "Teksti numero 78",
+  "Tuli palaa kuumana, mutta ei yhtä kuumana kuin sinä",
+  "Last christmas",
+  "I gave you my heart",
+  "But the very next day",
+  "You gave it away",
+  "Holidays are comming",
+  "The holidays are comming",
+  "Coca-Cola",
+  "Coco-Colassa oli ennen toisenkaista lunta",
+  "Piti animoida jotain siistiä",
+  "Et ees tiiä kuinka kauan mulla meni cs kallen tekemiseen",
+  "Mulla on halussa 3d printteri ja 3d skanni kallesta",
+  "Muhahahahahahaha",
+  "Laillisesti en voi oikeesti tehä kallen 3d mallilla mitään",
+  "Mä ostan helldivers 2",
+  "Kurkkua, valkosipulikastiketta, Pastaa, Mama nuudeleita, tomaattia, kinkkua, ruisleipää",
+  "Olen avaruus mies",
+  "On teoria minkä mukaan avaruutta ei ole olemassa ja mä vähän uskon siihen",
+  "Kallea ei saa päästää japaniin tai thaimaaseen",
+  "Warhammer 40k on liian siistiä",
+  "Tiitus mentioned",
+  "Mechanicus on aina oikeassa",
+  "Laiskuusta on aivan liian vaikeeta välttää",
+  "Kauneus sen nimi on sun nimi",
+  "Tuoksut kukalle. En kerro mille",
+  "Olet ihan neutraali",
+  "Olet uber cool",
+  "Miä köhän tänne vois nyt laittaa",
+  "Teksti numero 45",
+  "Lamput kuolee sukupuuttoon. Varmistan sen",
+  "Säälittävästi kalle pääsee lisääntymään",
+  "Jospa olis optimus prime",
+  "Oliks meiän ryhmässä joku masi?",
+  "Jospa olisi kaljaa",
+  "Kaisalla on alkoholismi",
+  "Sun hiukset on vau",
+  "Kaljuuntuminen",
+  "Sen nimi kylmyys?",
+  "I there for i am",
+  "Base belong to us",
+  "Nyt vois taas kirjoittaa jotain aivan liian pitkää niin tuhlaat aikaasi sen lukemiseen haha T. Kalle",
+  "Leo oli täällä",
+  "Kerran vietin koko yö kaverin sängyn alla jottai säykäyttäisin hänet",
+  "Tiedän enemmän kuin lääkärit",
+  ""
+];
+
+function compliment() {
+  document.getElementById("out").innerText =
+    compliments[Math.floor(Math.random() * compliments.length)];
+}
+</script>
 </body>
 </html>

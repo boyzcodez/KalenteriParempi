@@ -326,3 +326,22 @@ button{
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+
+/* Teksti Muutoksia */
+p{
+    font-size: 500%;
+    align-self: center;
+    color: #3498db;
+}
+h1{
+    align-self: center;
+    font-size: 500%;
+    color: #3498db;
+}
+h5{
+    font-size: 500%;
+    align-self: center;
+    color: #3498db;
+    margin-top: 200px;
+}
+
