@@ -60,7 +60,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        bottom: 20px;
+        bottom: 200px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 10;
@@ -196,7 +196,7 @@
     const PLAYER_MAX_HP = 100;
     const OPPONENT_MAX_HP = 100;
     const PUNCH_DAMAGE = 15;
-    const ATTACK_COOLDOWN = 1;
+    const ATTACK_COOLDOWN = 600;
 
     // Game state
     let gameState = {
@@ -377,15 +377,16 @@
             gameState.playerState = 'idle';
             updatePlayerSprite();
             gameState.isPlayerAnimating = false;
+            gameState.canPlayerAttack = true;
             enableControls();
 
             if (!checkGameOver()) {
                 // Opponent acts after a delay
                 setTimeout(() => {
                     opponentTurn();
-                }, 500);
+                }, 300);
             }
-        }, ATTACK_COOLDOWN);
+        }, 400);
     }
 
     function playerDodge() {
